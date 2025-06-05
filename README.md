@@ -243,36 +243,9 @@ Edite o arquivo `appsettings.json` na raiz do projeto:
 ### 4. Aplicar Migrations
 
 1. No terminal, na pasta do projeto (onde está o `.csproj`), execute:
-
    ```bash
-   dotnet ef migrations add InitialCreate --context AquaContext
+   dotnet ef database update 
    ```
-2. Em seguida, aplique as migrations ao banco Oracle:
-
-   ```bash
-   dotnet ef database update --context AquaContext
-   ```
-
-> Caso necessário, crie um *Design-Time DbContext Factory* implementando `IDesignTimeDbContextFactory<AquaContext>` apontando para a mesma string de conexão em `appsettings.json`.
-
-```csharp
-public class AquaContextFactory : IDesignTimeDbContextFactory<AquaContext>
-{
-    public AquaContext CreateDbContext(string[] args)
-    {
-        var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        var optionsBuilder = new DbContextOptionsBuilder<AquaContext>();
-        optionsBuilder.UseOracle(config.GetConnectionString("DefaultConnection"));
-
-        return new AquaContext(optionsBuilder.Options);
-    }
-}
-```
-
 ---
 
 ## Como Executar
