@@ -67,7 +67,6 @@ namespace backend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<WaterSource>> PostWaterSource(WaterSourceCreateDto dto)
         {
-            // Mapear DTO para entidade
             var waterSource = new WaterSource
             {
                 Nome = dto.Nome,
@@ -79,7 +78,6 @@ namespace backend.Controllers
                 CreatedById = dto.CreatedById,
                 LastInspected = dto.LastInspected,
                 Status = dto.Status,
-                // IsActive, CreatedAt e UpdatedAt já vêm com valores padrão
             };
 
             _context.WaterSources.Add(waterSource);
@@ -109,17 +107,10 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            // Verifica inconsistência de ID (não deveria ocorrer porque vem da URL)
-            // Mas mantemos para seguir padrão
-            // Nota: aqui o DTO não contém Id, pois o endpoint já define qual ID atualizar
-            // Caso o usuário inclua um campo Id no JSON, ele será ignorado.
-
-            // Armazenar valores antigos para registro de update
             var oldStatus = existing.Status;
             var oldLatitude = existing.Latitude;
             var oldLongitude = existing.Longitude;
 
-            // Atualizar campos da entidade
             existing.Nome = dto.Nome;
             existing.Descricao = dto.Descricao;
             existing.Localizacao = dto.Localizacao;
@@ -131,7 +122,6 @@ namespace backend.Controllers
             existing.IsActive = dto.IsActive;
             existing.UpdatedAt = DateTime.UtcNow;
 
-            // Criar novo registro de WaterSourceUpdate
             var updateRecord = new WaterSourceUpdate
             {
                 WaterSourceId = existing.Id,
@@ -140,7 +130,6 @@ namespace backend.Controllers
                 Status = dto.Status,
                 Latitude = dto.Latitude,
                 Longitude = dto.Longitude
-                // UpdateDate será DateTime.UtcNow por padrão
             };
             existing.WaterSourceUpdates.Add(updateRecord);
             _context.WaterSourceUpdates.Add(updateRecord);
