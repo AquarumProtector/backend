@@ -56,6 +56,8 @@ using (var scope = app.Services.CreateScope())
     try
     {
         await DbInitiliazer.SeedRolesAsync(services);
+        var db = scope.ServiceProvider.GetRequiredService<AquaContext>();
+        db.Database.Migrate();
     }
     catch (Exception ex)
     {

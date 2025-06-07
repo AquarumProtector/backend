@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SenhaMuitoForte1234!
+      POSTGRES_DB: aquarumprotector_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/InitDatabase.sql:/docker-entrypoint-initdb.d/01-init.sql
+    ports:
+      - "5432:5432"
+
+  backend:
+    image: dronen1456/aquarum-backend:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=aquarumprotector_db;Username=postgres;Password=SenhaMuitoForte1234!"
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Key: "uqW8EXYt+3WOsDntgbG5Jt68rNTMmKZwpawNRcMIkSY="
+
+volumes:
+  postgres_data:
