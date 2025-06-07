@@ -14,7 +14,6 @@ namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class WaterSourcesController : ControllerBase
     {
         private readonly AquaContext _context;
